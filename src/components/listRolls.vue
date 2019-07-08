@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <v-btn><router-link to="/" exact>Random</router-link></v-btn>
+      <v-btn><router-link to="/random" exact>Random</router-link></v-btn>
       <v-btn><router-link to="/add" exact>Add</router-link></v-btn>
     </div>
     <v-data-table :headers="headers" :items="rolls">
@@ -16,6 +16,7 @@
 </template>
 
 <script>
+  import db from '@/fb'
   export default {
     data: () => ({
       headers: [
@@ -27,37 +28,26 @@
         },
         { text: 'Roll', value: 'roll' },
         { text: 'Rating', value: 'rating' },
-        { text: 'Notes', value: 'notes' }
+        { text: 'Notes', value: 'notes' },  
       ],
-      rolls: [
-        {
-          restaurant: 'Harumi',
-          roll: 'Eternal Sunshine',
-          rating: '5/5',
-          notes: ''
-        },
-        {
-          restaurant: 'Harumi',
-          roll: 'I Love You',
-          rating: '5/5',
-          notes: ''
-        },
-        {
-          restaurant: 'Zum Sushi',
-          roll: 'Spiderman',
-          rating: '5/5',
-          notes: ''
-        },
-        {
-          restaurant: 'Zum Sushi',
-          roll: 'Hawaiian',
-          rating: '5/5',
-          notes: 'Very tasty for the price'
-        }
-      ]
+      rolls: []
+    }),
+    methods: {
 
-      
-    })
+    },
+    created() {
+      db.collection('rolls').onSnapshot(res => {
+        const changes = res.docChanges();
+        changes.forEach(change => {
+          if (change.type === 'added') {
+            this.rolls.push({
+              ...change.doc.data(), //... spreads all data fields into rolls
+              id: change.doc.id
+            })
+          }
+        });
+      })
+    }
   }
 </script>
 

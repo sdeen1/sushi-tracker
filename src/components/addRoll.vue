@@ -32,9 +32,7 @@ import db from '@/fb'
             rating: this.roll.rating,
             notes: this.roll.notes
           }
-          db.collection('rolls').add(project)/*.then({
-            console.log('added to db')
-          });*/
+          db.collection('rolls').add(project);
         }
     }
   }
