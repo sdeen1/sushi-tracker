@@ -8,6 +8,7 @@
         <v-textarea name="roll.notes" label="Notes"></v-textarea>
         <v-btn @click="submit" class="success">Add Roll</v-btn>
     </v-form>
+    <p><router-link to="/">Go back to list</router-link></p>
   </div>
 </template>
 
